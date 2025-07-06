@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>位置情報を取得する</title>
+</head>
+<body>
+  <h1>あなたの位置情報を取得します</h1>
+  <p id="status">読み込み中...</p>
+  <p id="location"></p>
+
+  <script>
+    const status = document.getElementById("status");
+    const locationOutput = document.getElementById("location");
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          status.textContent = "位置情報の取得に成功しました！";
+          locationOutput.textContent = `緯度: ${lat}, 経度: ${lon}`;
+        },
+        (error) => {
+          status.textContent = "位置情報の取得に失敗しました。";
+        }
+      );
+    } else {
+      status.textContent = "このブラウザでは位置情報取得に対応していません。";
+    }
+  </script>
+</body>
+</html>
