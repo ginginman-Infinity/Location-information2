@@ -2,31 +2,47 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>位置情報を取得する</title>
+  <title>位置情報送信テスト</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <h1>あなたの位置情報を取得します</h1>
-  <p id="status">読み込み中...</p>
-  <p id="location"></p>
+  <h1>位置情報をSupabaseに送信</h1>
+  <button onclick="sendLocation()">位置情報を送る</button>
+
+  <p id="status">ステータス表示中...</p>
 
   <script>
-    const status = document.getElementById("status");
-    const locationOutput = document.getElementById("location");
+    // 🔑 Supabase の設定
+    const SUPABASE_URL = "https://khfflcfiwfmfchpbsqph.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoZmZsY2Zpd2ZtZmNocGJzcXBoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4MDkyODMsImV4cCI6MjA2NzM4NTI4M30.wW0FoCXGZYagQENgOzyEsCF9cWatH6UO5O8ic-T0pdA";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          status.textContent = "位置情報の取得に成功しました！";
-          locationOutput.textContent = `緯度: ${lat}, 経度: ${lon}`;
-        },
-        (error) => {
-          status.textContent = "位置情報の取得に失敗しました。";
+    async function sendLocation() {
+      document.getElementById("status").textContent = "位置情報を取得中...";
+
+      if (!navigator.geolocation) {
+        document.getElementById("status").textContent = "位置情報が取得できません。";
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        const timestamp = new Date().toISOString();
+
+        const { data, error } = await supabase
+          .from("locations") // 🔸あなたが作ったテーブル名
+          .insert([
+            { latitude, longitude, timestamp }
+          ]);
+
+        if (error) {
+          document.getElementById("status").textContent = "送信に失敗しました。";
+          console.error(error);
+        } else {
+          document.getElementById("status").textContent = "送信完了！";
+          console.log("送信データ:", data);
         }
-      );
-    } else {
-      status.textContent = "このブラウザでは位置情報取得に対応していません。";
+      });
     }
   </script>
 </body>
