@@ -30,7 +30,7 @@
         const timestamp = new Date().toISOString();
 
         const { data, error } = await supabase
-          .from("locations") // 🔸あなたが作ったテーブル名
+          .from("locations") // 🔸Locations
           .insert([
             { latitude, longitude, timestamp }
           ]);
