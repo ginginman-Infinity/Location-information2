@@ -2,48 +2,35 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>位置情報送信テスト</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <title>位置情報テスト</title>
 </head>
 <body>
-  <h1>位置情報をSupabaseに送信</h1>
-  <button onclick="sendLocation()">位置情報を送る</button>
-
-  <p id="status">ステータス表示中...</p>
+  <h1>位置情報テスト</h1>
+  <p>このページでは、ブラウザの位置情報取得APIをテストします。</p>
+  <button id="btn">現在地を取得する</button>
+  <pre id="out" style="margin-top:1em; background:#f7f7f7; padding:1em;"></pre>
 
   <script>
-    // 🔑 Supabase の設定
-    const SUPABASE_URL = "https://khfflcfiwfmfchpbsqph.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoZmZsY2Zpd2ZtZmNocGJzcXBoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4MDkyODMsImV4cCI6MjA2NzM4NTI4M30.wW0FoCXGZYagQENgOzyEsCF9cWatH6UO5O8ic-T0pdA";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const btn = document.getElementById('btn');
+    const out = document.getElementById('out');
 
-    async function sendLocation() {
-      document.getElementById("status").textContent = "位置情報を取得中...";
-
+    btn.onclick = () => {
+      out.textContent = "位置情報を取得中...";
       if (!navigator.geolocation) {
-        document.getElementById("status").textContent = "位置情報が取得できません。";
+        out.textContent = "このブラウザは位置情報APIに対応していません。";
         return;
       }
-
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        const timestamp = new Date().toISOString();
-
-        const { data, error } = await supabase
-          .from("locations") // 🔸Locations
-          .insert([
-            { latitude, longitude, timestamp }
-          ]);
-
-        if (error) {
-          document.getElementById("status").textContent = "送信に失敗しました。";
-          console.error(error);
-        } else {
-          document.getElementById("status").textContent = "送信完了！";
-          console.log("送信データ:", data);
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const { latitude, longitude, accuracy } = pos.coords;
+          out.textContent = 
+            `緯度: ${latitude}\n経度: ${longitude}\n精度: 約${accuracy}m`;
+        },
+        err => {
+          out.textContent = "位置情報を取得できませんでした。\n" + err.message;
         }
-      });
-    }
+      );
+    };
   </script>
 </body>
 </html>
