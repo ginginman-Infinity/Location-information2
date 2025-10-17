@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL生成ツール</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f8fafc;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #3b82f6;
+      color: white;
+      margin-bottom: 20px;
+    }
+    .url-box {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 500px;
+      margin: 20px auto;
+      word-break: break-all;
+    }
+    .label {
+      font-weight: bold;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <h1>リンク生成ツール</h1>
+  <p>ボタンを押すと、相手用と確認用URLが自動で作られます。</p>
+
+  <button id="generateBtn">リンクを生成する</button>
+
+  <div id="result" class="url-box" style="display:none;">
+    <p><span class="label">相手用URL：</span><br><a id="targetLink" href="#" target="_blank"></a></p>
+    <p><span class="label">確認用URL：</span><br><a id="checkLink" href="#" target="_blank"></a></p>
+  </div>
+
+  <script>
+    document.getElementById("generateBtn").addEventListener("click", () => {
+      // ランダムなIDを生成（英数字7文字）
+      const id = Math.random().toString(36).substring(2, 9);
+
+      const baseUrl = window.location.origin + window.location.pathname.replace("generate.html", "");
+
+      // 相手用URL
+      const targetUrl = `${baseUrl}index.html?id=${id}`;
+      // 確認用URL
+      const checkUrl = `${baseUrl}check.html?id=${id}`;
+
+      // 表示更新
+      document.getElementById("targetLink").textContent = targetUrl;
+      document.getElementById("targetLink").href = targetUrl;
+      document.getElementById("checkLink").textContent = checkUrl;
+      document.getElementById("checkLink").href = checkUrl;
+      document.getElementById("result").style.display = "block";
+    });
+  </script>
+</body>
+</html>
