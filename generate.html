@@ -72,17 +72,18 @@
   </div>
 
   <script>
-    // URL短縮関数（is.gd）
-    async function shortenUrl(longUrl) {
-      try {
-        const response = await fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`);
-        const shortUrl = await response.text();
-        return shortUrl;
-      } catch (error) {
-        console.error("短縮に失敗しました:", error);
-        return longUrl; // 失敗したら元URLを返す
-      }
-    }
+  async function shortenUrl(longUrl) {
+  try {
+    const proxy = "https://api.allorigins.win/raw?url=";
+    const apiUrl = `https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`;
+    const response = await fetch(proxy + encodeURIComponent(apiUrl));
+    const shortUrl = await response.text();
+    return shortUrl.trim();
+  } catch (error) {
+    console.error("短縮に失敗しました:", error);
+    return longUrl;
+  }
+}
 
     function copyText(text, button) {
       navigator.clipboard.writeText(text).then(() => {
