@@ -19,7 +19,7 @@
       cursor: pointer;
       background: #3b82f6;
       color: white;
-      margin-bottom: 20px;
+      margin: 10px;
     }
     .url-box {
       background: white;
@@ -35,6 +35,12 @@
       font-weight: bold;
       color: #475569;
     }
+    .copy-btn {
+      background: #10b981;
+    }
+    .copied {
+      background: #16a34a !important;
+    }
   </style>
 </head>
 <body>
@@ -44,28 +50,46 @@
   <button id="generateBtn">リンクを生成する</button>
 
   <div id="result" class="url-box" style="display:none;">
-    <p><span class="label">相手用URL：</span><br><a id="targetLink" href="#" target="_blank"></a></p>
-    <p><span class="label">確認用URL：</span><br><a id="checkLink" href="#" target="_blank"></a></p>
+    <p>
+      <span class="label">相手用URL：</span><br>
+      <a id="targetLink" href="#" target="_blank"></a><br>
+      <button class="copy-btn" id="copyTarget">📋 コピー</button>
+    </p>
+    <hr>
+    <p>
+      <span class="label">確認用URL：</span><br>
+      <a id="checkLink" href="#" target="_blank"></a><br>
+      <button class="copy-btn" id="copyCheck">📋 コピー</button>
+    </p>
   </div>
 
   <script>
+    function copyText(text, button) {
+      navigator.clipboard.writeText(text).then(() => {
+        button.textContent = "✅ コピー済み";
+        button.classList.add("copied");
+        setTimeout(() => {
+          button.textContent = "📋 コピー";
+          button.classList.remove("copied");
+        }, 1500);
+      });
+    }
+
     document.getElementById("generateBtn").addEventListener("click", () => {
-      // ランダムなIDを生成（英数字7文字）
       const id = Math.random().toString(36).substring(2, 9);
-
       const baseUrl = window.location.origin + window.location.pathname.replace("generate.html", "");
-
-      // 相手用URL
       const targetUrl = `${baseUrl}index.html?id=${id}`;
-      // 確認用URL
       const checkUrl = `${baseUrl}check.html?id=${id}`;
 
-      // 表示更新
       document.getElementById("targetLink").textContent = targetUrl;
       document.getElementById("targetLink").href = targetUrl;
       document.getElementById("checkLink").textContent = checkUrl;
       document.getElementById("checkLink").href = checkUrl;
       document.getElementById("result").style.display = "block";
+
+      // コピー機能
+      document.getElementById("copyTarget").onclick = () => copyText(targetUrl, document.getElementById("copyTarget"));
+      document.getElementById("copyCheck").onclick = () => copyText(checkUrl, document.getElementById("copyCheck"));
     });
   </script>
 </body>
