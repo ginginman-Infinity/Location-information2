@@ -10,6 +10,13 @@
   <meta name="twitter:card" content="summary">
   <title>位置情報送信ページ</title>
   <style>
+   .message {
+  width: 14em; /* 1行14文字分の幅を指定（全角1文字=1em） */
+  margin: 0 auto;
+  word-wrap: break-word;
+  line-height: 1.6;
+}
+    
     body {
       font-family: system-ui, sans-serif;
       text-align: center;
@@ -64,7 +71,7 @@ button:hover {
 </head>
 <body>
   <h1>地域の魅力共有掲示板サイトです。</h1>
-  <p>このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</p>
+<p class="message">このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</p>
 
   <div class="button-container" id="buttonContainer">
     <button id="getLocationBtn">私は18歳以上です-入力</button>
