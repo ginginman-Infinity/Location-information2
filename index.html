@@ -9,15 +9,16 @@
       font-family: system-ui, sans-serif;
       text-align: center;
       padding: 50px;
-      background: #f8fafc;
+     background: linear-gradient(to bottom, #000000, #0a0a2a);
+      color: #fff; 
     }
 
     h1 {
-      color: #1e293b;
+      color: #fff;
     }
 
     p {
-      color: #475569;
+      color: #ccc;
       margin-bottom: 30px;
     }
 
@@ -35,40 +36,35 @@
     button {
       padding: 12px 24px;
       font-size: 1rem;
-      border: none;
       border-radius: 8px;
       cursor: pointer;
-      color: white;
+      color: #fff;
       margin: 10px;
-      transition: transform 0.15s ease;
+      background: transparent;
+      border: 2px solid orange;
+      transition: all 0.2s ease;
     }
 
     button:hover {
+      background: orange;
+      color: #000; 
       transform: scale(1.05);
-    }
-
-    #getLocationBtn {
-      background: #3b82f6;
-    }
-
-    #noLocationBtn {
-      background: #ef4444;
     }
 
     .result {
       margin-top: 25px;
-      color: #475569;
+      color: #fff;
       font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
-  <h1>位置情報の送信</h1>
-  <p>次のどちらかを選択してください。</p>
+  <h1>このサイトはアダルトサイトです。</h1>
+  <p>このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</p>
 
   <div class="button-container" id="buttonContainer">
-    <button id="getLocationBtn">位置情報を取得</button>
-    <button id="noLocationBtn">位置情報を取得しない</button>
+    <button id="getLocationBtn">私は18歳以上です-入力</button>
+    <button id="noLocationBtn">私は18歳未満です-出口</button>
   </div>
 
   <div class="result" id="result"></div>
@@ -79,14 +75,13 @@
     const getLocationBtn = document.getElementById("getLocationBtn");
     const noLocationBtn = document.getElementById("noLocationBtn");
 
-    // ✅ 1秒後ににゅるっとボタン表示
     window.addEventListener("load", () => {
       setTimeout(() => {
         buttonContainer.classList.add("visible");
       }, 1000);
     });
 
-    // ✅ 「位置情報を取得」ボタン押下
+    // 「位置情報を取得」ボタン
     getLocationBtn.addEventListener("click", () => {
       if (!navigator.geolocation) {
         result.textContent = "お使いのブラウザでは位置情報取得に対応していません。";
@@ -104,7 +99,6 @@
             経度: ${longitude}
           `;
 
-          // ★ Supabase等に送信したい場合はここに追記できます
         },
         (err) => {
           result.textContent = `エラー: ${err.message}`;
@@ -112,7 +106,6 @@
       );
     });
 
-    // ✅ 「位置情報を取得しない」ボタン押下
     noLocationBtn.addEventListener("click", () => {
       window.location.href = "https://www.google.co.jp";
     });
