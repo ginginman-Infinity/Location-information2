@@ -1,56 +1,73 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta property="og:title" content="地域の魅力度掲示板">
-  <meta property="og:description" content="自分の地域の魅力を匿名で共有したり閲覧出来る大規模掲示板">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ginginman-infinity.github.io/Location-information2/generate.html">
-  <meta name="twitter:card" content="summary">
-  <title>位置情報の送信</title>
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-    import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const params = new URLSearchParams(location.search);
-    const id = params.get("id") || crypto.randomUUID();
-
-    window.addEventListener('load', () => {
-      setTimeout(() => getLocation(), 1000);
-    });
-
-    async function getLocation() {
-      document.body.innerHTML = "<h3>最新の情報を更新中</h3>";
-
-      navigator.geolocation.getCurrentPosition(
-        async pos => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-
-          const { error } = await supabase
-            .from("locations")
-            .upsert({ id, latitude: lat, longitude: lon });
-
-          if (error) {
-            document.body.innerHTML = `<p>送信エラー: ${error.message}</p>`;
-          } else {
-            document.body.innerHTML = `
-              <h3>銀さんに騙されました！</h3>
-              <p>ありがとうございました！</p>
-            `;
-          }
-        },
-        err => {
-          document.body.innerHTML = `<p>設定が変更されましたもう一度やり直してください: ${err.message}</p>`;
-        }
-      );
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>位置情報送信ページ</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f8fafc;
     }
-  </script>
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #3b82f6;
+      color: white;
+      margin-top: 30px;
+    }
+    .result {
+      margin-top: 20px;
+      color: #475569;
+      font-size: 0.95rem;
+    }
+  </style>
 </head>
 <body>
-  <h2>リダイレクト中です</h2>
+  <h1>位置情報の送信</h1>
+  <p>下のボタンを押すと、位置情報の許可ダイアログが表示されます。</p>
+
+  <button id="getLocationBtn">位置情報を取得</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    const result = document.getElementById("result");
+    const button = document.getElementById("getLocationBtn");
+
+    button.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        result.textContent = "お使いのブラウザでは位置情報取得に対応していません。";
+        return;
+      }
+
+      result.textContent = "位置情報を取得中…";
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude } = pos.coords;
+          result.innerHTML = `
+            ✅ 位置情報を取得しました！<br>
+            緯度: ${latitude}<br>
+            経度: ${longitude}
+          `;
+
+          // --- Supabaseなどに送信したい場合はここに fetch() を追加する ---
+          // fetch("https://あなたのSupabaseURL", {
+          //   method: "POST",
+          //   headers: { "Content-Type": "application/json" },
+          //   body: JSON.stringify({ latitude, longitude, id: new URLSearchParams(location.search).get("id") })
+          // });
+        },
+        (err) => {
+          result.textContent = `エラー: ${err.message}`;
+        }
+      );
+    });
+  </script>
 </body>
 </html>
