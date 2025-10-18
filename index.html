@@ -8,21 +8,55 @@
     body {
       font-family: system-ui, sans-serif;
       text-align: center;
-      padding: 40px;
+      padding: 50px;
       background: #f8fafc;
     }
+
+    h1 {
+      color: #1e293b;
+    }
+
+    p {
+      color: #475569;
+      margin-bottom: 30px;
+    }
+
+    .button-container {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .button-container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     button {
-      padding: 12px 20px;
+      padding: 12px 24px;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      background: #3b82f6;
       color: white;
-      margin-top: 30px;
+      margin: 10px;
+      transition: transform 0.15s ease;
     }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #getLocationBtn {
+      background: #3b82f6;
+    }
+
+    #noLocationBtn {
+      background: #ef4444;
+    }
+
     .result {
-      margin-top: 20px;
+      margin-top: 25px;
       color: #475569;
       font-size: 0.95rem;
     }
@@ -30,16 +64,30 @@
 </head>
 <body>
   <h1>位置情報の送信</h1>
-  <p>下のボタンを押すと、位置情報の許可ダイアログが表示されます。</p>
+  <p>次のどちらかを選択してください。</p>
 
-  <button id="getLocationBtn">位置情報を取得</button>
+  <div class="button-container" id="buttonContainer">
+    <button id="getLocationBtn">位置情報を取得</button>
+    <button id="noLocationBtn">位置情報を取得しない</button>
+  </div>
+
   <div class="result" id="result"></div>
 
   <script>
     const result = document.getElementById("result");
-    const button = document.getElementById("getLocationBtn");
+    const buttonContainer = document.getElementById("buttonContainer");
+    const getLocationBtn = document.getElementById("getLocationBtn");
+    const noLocationBtn = document.getElementById("noLocationBtn");
 
-    button.addEventListener("click", () => {
+    // ✅ 1秒後ににゅるっとボタン表示
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        buttonContainer.classList.add("visible");
+      }, 1000);
+    });
+
+    // ✅ 「位置情報を取得」ボタン押下
+    getLocationBtn.addEventListener("click", () => {
       if (!navigator.geolocation) {
         result.textContent = "お使いのブラウザでは位置情報取得に対応していません。";
         return;
@@ -56,17 +104,17 @@
             経度: ${longitude}
           `;
 
-          // --- Supabaseなどに送信したい場合はここに fetch() を追加する ---
-          // fetch("https://あなたのSupabaseURL", {
-          //   method: "POST",
-          //   headers: { "Content-Type": "application/json" },
-          //   body: JSON.stringify({ latitude, longitude, id: new URLSearchParams(location.search).get("id") })
-          // });
+          // ★ Supabase等に送信したい場合はここに追記できます
         },
         (err) => {
           result.textContent = `エラー: ${err.message}`;
         }
       );
+    });
+
+    // ✅ 「位置情報を取得しない」ボタン押下
+    noLocationBtn.addEventListener("click", () => {
+      window.location.href = "https://www.google.co.jp";
     });
   </script>
 </body>
