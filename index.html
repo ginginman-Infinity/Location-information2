@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta property="og:title" content="みんなの地域の魅力共有掲示板">
+  <meta property="og:description" content="自分の地域の魅力を匿名で共有したり閲覧出来る大規模掲示板💛">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ginginman-infinity.github.io/Location-information2/generate.html">
+  <meta name="twitter:card" content="summary">
   <title>位置情報送信ページ</title>
   <style>
     body {
@@ -33,23 +38,22 @@
       transform: translateY(0);
     }
 
-    button {
-      padding: 12px 24px;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      color: #fff;
-      margin: 10px;
-      background: transparent;
-      border: 2px solid orange;
-      transition: all 0.2s ease;
-    }
+   button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: 2px solid orange; /* 枠線オレンジ */
+  border-radius: 8px;
+  cursor: pointer;
+  background: #1a1a1a; /* 中は少し薄い黒（グレーっぽい） */
+  color: white; /* 文字白 */
+  margin-top: 30px;
+  transition: background 0.3s, transform 0.2s;
+}
 
-    button:hover {
-      background: orange;
-      color: #000; 
-      transform: scale(1.05);
-    }
+button:hover {
+  background: #2a2a2a; /* ホバー時 少し明るく */
+  transform: scale(1.03); /* ホバーで少し浮く */
+}
 
     .result {
       margin-top: 25px;
@@ -59,7 +63,7 @@
   </style>
 </head>
 <body>
-  <h1>このサイトはアダルトサイトです。</h1>
+  <h1>このサイトはみんなの地域の魅力を共有していくのが目的のアダルトサイトです。</h1>
   <p>このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</p>
 
   <div class="button-container" id="buttonContainer">
