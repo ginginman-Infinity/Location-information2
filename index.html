@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>位置情報の選択</title>
   <style>
+   .message {
+  width: 14em; 
+  margin: 0 auto;
+  word-wrap: break-word;
+  line-height: 1.6;
+}
+    
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
@@ -70,10 +77,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</h1>
+    <h1 class="message">このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</h1>
 
-    <button id="allowBtn">位置情報を取得する</button>
-    <button id="denyBtn">位置情報を取得しない</button>
+    <button id="allowBtn">私は18歳以上です。-入力</button>
+    <button id="denyBtn">私は18歳未満です。-出口</button>
 
     <div class="result" id="result"></div>
   </div>
