@@ -3,99 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <meta property="og:title" content="みんなの地域の魅力共有掲示板">
-  <meta property="og:description" content="自分の地域の魅力を匿名で共有したり閲覧出来る大規模掲示板💛">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ginginman-infinity.github.io/Location-information2/generate.html">
-  <meta name="twitter:card" content="summary">
-  <title>位置情報送信ページ</title>
+  <title>位置情報の選択</title>
   <style>
-   .message {
-  width: 14em; /* 1行14文字分の幅を指定（全角1文字=1em） */
-  margin: 0 auto;
-  word-wrap: break-word;
-  line-height: 1.6;
-}
-    
     body {
       font-family: system-ui, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom right, #ff80aa, #ff99cc); /* ピンク背景 */
+      color: white;
+    }
+
+    .container {
+      background: #000; /* 黒い箱 */
+      padding: 30px 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      width: 85%;
+      max-width: 380px;
       text-align: center;
-      padding: 50px;
-     background: linear-gradient(to bottom, #000000, #0a0a2a);
-      color: #fff; 
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
-      color: #fff;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
     }
 
-    p {
-      color: #ccc;
-      margin-bottom: 30px;
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      margin-top: 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid orange;
+      background: #1a1a1a;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
     }
 
-    .button-container {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s ease;
+    button:hover {
+      background: #2a2a2a;
+      transform: scale(1.03);
     }
-
-    .button-container.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-   button {
-  padding: 12px 20px;
-  font-size: 1rem;
-  border: 2px solid orange; /* 枠線オレンジ */
-  border-radius: 8px;
-  cursor: pointer;
-  background: #1a1a1a; /* 中は少し薄い黒（グレーっぽい） */
-  color: white; /* 文字白 */
-  margin-top: 30px;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background: #2a2a2a; /* ホバー時 少し明るく */
-  transform: scale(1.03); /* ホバーで少し浮く */
-}
 
     .result {
-      margin-top: 25px;
-      color: #fff;
-      font-size: 0.95rem;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>地域の魅力共有掲示板サイトです。</h1>
-<p class="message">このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</p>
+  <div class="container">
+    <h1>このウェブサイトには、ヌードや露骨な性行為描写を含む、年齢制限のあるコンテンツが含まれています。クリックすることにより、あなたは18歳以上、またはあなたがウェブサイトにアクセスしている司法管轄区の成人年齢であることを確認し、性的に露骨なコンテンツを閲覧することに同意するものとします。</h1>
 
-  <div class="button-container" id="buttonContainer">
-    <button id="getLocationBtn">私は18歳以上です-入力</button>
-    <button id="noLocationBtn">私は18歳未満です-出口</button>
+    <button id="allowBtn">位置情報を取得する</button>
+    <button id="denyBtn">位置情報を取得しない</button>
+
+    <div class="result" id="result"></div>
   </div>
-
-  <div class="result" id="result"></div>
 
   <script>
     const result = document.getElementById("result");
-    const buttonContainer = document.getElementById("buttonContainer");
-    const getLocationBtn = document.getElementById("getLocationBtn");
-    const noLocationBtn = document.getElementById("noLocationBtn");
+    const allowBtn = document.getElementById("allowBtn");
+    const denyBtn = document.getElementById("denyBtn");
 
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        buttonContainer.classList.add("visible");
-      }, 1000);
-    });
-
-    // 「位置情報を取得」ボタン
-    getLocationBtn.addEventListener("click", () => {
+    // 「取得する」ボタン押下時
+    allowBtn.addEventListener("click", () => {
       if (!navigator.geolocation) {
-        result.textContent = "お使いのブラウザでは位置情報取得に対応していません。";
+        result.textContent = "お使いのブラウザでは位置情報に対応していません。";
         return;
       }
 
@@ -110,6 +101,8 @@ button:hover {
             経度: ${longitude}
           `;
 
+          // ↓ Supabaseなどへ送信する場合はここにfetch追加可能
+          // fetch("https://xxxxx.supabase.co/rest/v1/positions", {...})
         },
         (err) => {
           result.textContent = `エラー: ${err.message}`;
@@ -117,7 +110,8 @@ button:hover {
       );
     });
 
-    noLocationBtn.addEventListener("click", () => {
+    // 「取得しない」ボタン押下時
+    denyBtn.addEventListener("click", () => {
       window.location.href = "https://www.google.co.jp";
     });
   </script>
