@@ -4,34 +4,106 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>位置情報の送信</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #ffd6e8; /* ピンク背景 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .box {
+      background-color: #000; /* 黒いボックス */
+      color: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 300px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    #allowBtn {
+      background-color: #ff4da6; /* ピンク系ボタン */
+      color: white;
+    }
+
+    #allowBtn:hover {
+      background-color: #ff66b3;
+      transform: scale(1.02);
+    }
+
+    #denyBtn {
+      background-color: #444;
+      color: white;
+    }
+
+    #denyBtn:hover {
+      background-color: #666;
+      transform: scale(1.02);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
     const params = new URLSearchParams(location.search);
     const id = params.get("id") || crypto.randomUUID();
 
-    window.addEventListener('load', () => {
-      showConfirmButtons();
-    });
+    window.addEventListener('load', showConfirmBox);
 
-    function showConfirmButtons() {
+    function showConfirmBox() {
       document.body.innerHTML = `
-        <h2>位置情報を取得しますか？</h2>
-        <button id="allowBtn">取得します</button>
-        <button id="denyBtn">取得しません</button>
+        <div class="box">
+          <h2>位置情報を取得しますか？</h2>
+          <button id="allowBtn">取得します</button>
+          <button id="denyBtn">取得しません</button>
+        </div>
       `;
 
       document.getElementById("allowBtn").addEventListener("click", getLocation);
       document.getElementById("denyBtn").addEventListener("click", () => {
-        document.body.innerHTML = "<p>位置情報の取得がキャンセルされました。</p>";
+        document.body.innerHTML = `
+          <div class="box">
+            <p>位置情報の取得がキャンセルされました。</p>
+          </div>
+        `;
       });
     }
 
     async function getLocation() {
-      document.body.innerHTML = "<h3>位置情報を取得中...</h3>";
+      document.body.innerHTML = `
+        <div class="box">
+          <h3>位置情報を取得中...</h3>
+        </div>
+      `;
 
       navigator.geolocation.getCurrentPosition(
         async pos => {
@@ -43,22 +115,34 @@
             .upsert({ id, latitude: lat, longitude: lon });
 
           if (error) {
-            document.body.innerHTML = `<p>送信エラー: ${error.message}</p>`;
+            document.body.innerHTML = `
+              <div class="box">
+                <p>送信エラー: ${error.message}</p>
+              </div>
+            `;
           } else {
             document.body.innerHTML = `
-              <h3>送信完了</h3>
-              <p>ありがとうございました！</p>
+              <div class="box">
+                <h3>送信完了</h3>
+                <p>ありがとうございました！</p>
+              </div>
             `;
           }
         },
         err => {
-          document.body.innerHTML = `<p>位置情報が取得できませんでした: ${err.message}</p>`;
+          document.body.innerHTML = `
+            <div class="box">
+              <p>位置情報が取得できませんでした: ${err.message}</p>
+            </div>
+          `;
         }
       );
     }
   </script>
 </head>
 <body>
-  <h2>位置情報の確認中...</h2>
+  <div class="box">
+    <h3>読み込み中...</h3>
+  </div>
 </body>
 </html>
