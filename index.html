@@ -82,9 +82,9 @@
     function showConfirmBox() {
       document.body.innerHTML = `
         <div class="box">
-          <h2>位置情報を取得しますか？</h2>
-          <button id="allowBtn">取得します</button>
-          <button id="denyBtn">取得しません</button>
+          <h2>18歳以上ですか？</h2>
+          <button id="allowBtn">私は18歳以上です-入力</button>
+          <button id="denyBtn">私は18歳未満です-出口</button>
         </div>
       `;
 
@@ -92,7 +92,7 @@
       document.getElementById("denyBtn").addEventListener("click", () => {
         document.body.innerHTML = `
           <div class="box">
-            <p>位置情報の取得がキャンセルされました。</p>
+            <p>当サイトは18歳以上の利用のみを対象としています。</p>
           </div>
         `;
       });
