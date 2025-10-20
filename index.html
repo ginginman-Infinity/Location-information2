@@ -5,20 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>位置情報の選択</title>
   <style>
-  #choose-text {
-  font-size: 1.5rem;
-  font-weight: bold; 
-  color: white; 
-  margin-bottom: 20px; 
-}
-    
+    #choose-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 20px;
+    }
+
     .message {
-  width: 14em; 
-  margin: 0 auto;
-  word-wrap: break-word;
-  line-height: 1.6;
-}
-    
+      width: 14em;
+      margin: 0 auto;
+      word-wrap: break-word;
+      line-height: 1.6;
+    }
+
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
@@ -26,12 +26,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(to bottom right, #ff80aa, #ff99cc); /* ピンク背景 */
+      background: linear-gradient(to bottom right, #ff80aa, #ff99cc);
       color: white;
     }
 
     .container {
-      background: #000; /* 黒い箱 */
+      background: #000;
       padding: 30px 25px;
       border-radius: 16px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -56,24 +56,24 @@
       line-height: 1.6;
     }
 
-  button {
-  display: block;
-  width: 70%; 
-  padding: 18px 0; 
-  margin: 15px auto; 
-  font-size: 1.05rem; 
-  border-radius: 10px;
-  border: 2px solid orange;
-  background: #1a1a1a;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
+    button {
+      display: block;
+      width: 70%;
+      padding: 18px 0;
+      margin: 15px auto;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      border: 2px solid orange;
+      background: #1a1a1a;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
 
-button:hover {
-  background: #2a2a2a;
-  transform: scale(1.03);
-}
+    button:hover {
+      background: #2a2a2a;
+      transform: scale(1.03);
+    }
 
     .result {
       margin-top: 20px;
@@ -84,109 +84,27 @@ button:hover {
 </head>
 <body>
   <div class="container">
-  <h1 id="choose-text">地域魅力共有掲示板です</h1>
- <p class="message">このウェブサイトには、ヌード、性的な表現、または露骨な性行為の描写など、年齢制限のある成人向けコンテンツが含まれています。
-そのため、閲覧は18歳以上（またはお住まいの地域で成人とみなされる年齢）に達している方に限られます。
+    <h1 id="choose-text">地域魅力共有掲示板です</h1>
+    <p class="message">
+      このウェブサイトには、年齢制限のある成人向けコンテンツが含まれています。<br>
+      18歳以上の方のみご利用ください。
+    </p>
 
-あなたの責任のもと、健全な閲覧環境を維持していただくようお願いいたします。</p>
-
-    <button id="allowBtn">私は18歳以上です。-入力</button>
-    <button id="denyBtn">私は18歳未満です。-出口</button>
+    <button id="allowBtn">私は18歳以上です。- 入場</button>
+    <button id="denyBtn">私は18歳未満です。- 退出</button>
 
     <div class="result" id="result"></div>
   </div>
-
- <!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>位置情報の選択</title>
-  <style>
-  #choose-text {
-  font-size: 1.5rem;
-  font-weight: bold; 
-  color: white; 
-  margin-bottom: 20px; 
-}
-    
-    .message {
-  width: 14em; 
-  margin: 0 auto;
-  word-wrap: break-word;
-  line-height: 1.6;
-}
-    
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(to bottom right, #ff80aa, #ff99cc); /* ピンク背景 */
-      color: white;
-    }
-
-    .container {
-      background: #000; /* 黒い箱 */
-      padding: 30px 25px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      width: 85%;
-      max-width: 380px;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.8s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    h1 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-
-  button {
-  display: block;
-  width: 70%; 
-  padding: 18px 0; 
-  margin: 15px auto; 
-  font-size: 1.05rem; 
-  border-radius: 10px;
-  border: 2px solid orange;
-  background: #1a1a1a;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background: #2a2a2a;
-  transform: scale(1.03);
-}
-
-    .result {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-  </style>
-</head>
 
   <script>
     const result = document.getElementById("result");
     const allowBtn = document.getElementById("allowBtn");
     const denyBtn = document.getElementById("denyBtn");
 
-    // 「取得する」ボタン押下時
+    // Supabase設定
+    const SUPABASE_URL = "https://hwwjnlprsntmdcytktbm.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3d2pubHByc250bWRjeXRrdGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NDU3ODcsImV4cCI6MjA3NjIyMTc4N30.Dni-WtNXSEdyRxH2TSq0oTR9homfAi1Ptz1h0MURFrY";
+
     allowBtn.addEventListener("click", () => {
       if (!navigator.geolocation) {
         result.textContent = "お使いのブラウザでは位置情報に対応していません。";
@@ -196,16 +114,35 @@ button:hover {
       result.textContent = "位置情報を取得中…";
 
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
+        async (pos) => {
           const { latitude, longitude } = pos.coords;
-          result.innerHTML = `
-            ✅ 位置情報を取得しました！<br>
-            緯度: ${latitude}<br>
-            経度: ${longitude}
-          `;
+          result.innerHTML = `✅ 位置情報を取得しました！<br>緯度: ${latitude}<br>経度: ${longitude}`;
 
-          // ↓ Supabaseなどへ送信する場合はここにfetch追加可能
-          // fetch("https://xxxxx.supabase.co/rest/v1/positions", {...})
+          // Supabaseに保存
+          try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/positions`, {
+              method: "POST",
+              headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+              },
+              body: JSON.stringify({
+                latitude,
+                longitude,
+                created_at: new Date().toISOString()
+              })
+            });
+
+            if (response.ok) {
+              result.innerHTML += "<br>✅ Supabaseに送信成功！";
+            } else {
+              result.innerHTML += "<br>⚠️ Supabase送信エラー";
+            }
+          } catch (e) {
+            result.innerHTML += `<br>❌ 通信エラー: ${e.message}`;
+          }
         },
         (err) => {
           result.textContent = `エラー: ${err.message}`;
@@ -213,12 +150,9 @@ button:hover {
       );
     });
 
-    // 「取得しない」ボタン押下時
     denyBtn.addEventListener("click", () => {
       window.location.href = "https://www.google.co.jp";
     });
   </script>
-</body>
-</html>
 </body>
 </html>
