@@ -72,18 +72,36 @@
   </div>
 
   <script>
-  // --- URL短縮関数（is.gd + corsproxyでCORS回避）---
-  async function shortenUrl(longUrl) {
-    try {
-      const apiUrl = `https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`;
-      const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`);
-      const shortUrl = await response.text();
-      return shortUrl.trim();
-    } catch (error) {
-      return longUrl;
-    }
-  }
+ // URL短縮（is.gd）
+async function shortenUrl(longUrl) {
+  try {
+    // URL形式チェック
+    new URL(longUrl);
 
+    const apiUrl =
+      "https://is.gd/create.php?format=json&url=" +
+      encodeURIComponent(longUrl);
+
+    const response = await fetch(
+      "https://corsproxy.io/?" + encodeURIComponent(apiUrl)
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.shorturl) {
+      return data.shorturl;
+    }
+
+    throw new Error(data.errormessage || "Unknown error");
+  } catch (error) {
+    console.error("短縮失敗:", error);
+    return longUrl; // 失敗時は元URLを返す
+  }
+}
     function copyText(text, button) {
       navigator.clipboard.writeText(text).then(() => {
         button.textContent = "✅ コピー済み";
