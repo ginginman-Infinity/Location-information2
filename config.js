@@ -1,2 +1,2 @@
-export const SUPABASE_URL = "https://lwrfqzwsbxhqqtdifsgi.supabase.co";
+export const SUPABASE_URL = "https://kwbxywugzrlbcalmwvjw.supabase.co";
 export const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3cmZxendzYnhocXF0ZGlmc2dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMzc3NjIsImV4cCI6MjA5NTYxMzc2Mn0.0-TcW6_vM1GGELtKITHL14qcQbt_YSu1_FqI3PNWB44";
