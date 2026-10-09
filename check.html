@@ -31,10 +31,12 @@
         .eq("id", id)
         .single();
 
-      if (error || !data) {
-        document.body.innerHTML = `<p>位置情報が見つかりません。</p>`;
-        return;
-      }
+     if (error || !data) {
+  console.error("位置情報取得エラー:", error);
+  document.body.innerHTML =
+    `<p>位置情報が見つかりません。</p>`;
+  return;
+}
 
       const { latitude, longitude } = data;
 
